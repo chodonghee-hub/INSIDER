@@ -1,11 +1,13 @@
 """FastAPI 앱 — POST /report 단일 엔드포인트 (PRD 7.1절)."""
 
 import json
+import os
 from pathlib import Path
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from google.genai.errors import APIError
 from pydantic import BaseModel
 
 from src.report_generator import build_report
@@ -14,9 +16,16 @@ load_dotenv()
 
 app = FastAPI(title="K-CBCL 사전 안내 리포트 API")
 
+_default_origins = ["http://localhost:5173"]
+_extra_origins = [
+    origin.strip()
+    for origin in os.getenv("ALLOWED_ORIGINS", "").split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=_default_origins + _extra_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -49,3 +58,7 @@ def create_report(request: ReportRequest):
         raise HTTPException(status_code=502, detail=str(exc)) from exc
     except RuntimeError as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
+    except APIError as exc:
+        raise HTTPException(
+            status_code=502, detail=f"LLM 호출 중 오류가 발생했습니다: {exc.message}"
+        ) from exc
