@@ -1,7 +1,24 @@
 :root {
   font: 16px/1.5 system-ui, "Segoe UI", Roboto, sans-serif;
-  color: #222;
-  background: #fdfaf7;
+  color: #2b241f;
+  background: #ffffff;
+
+  --color-primary: #ff8a4c;
+  --color-primary-dark: #f4762f;
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-border: #f0e2d6;
+  --color-text: #2b241f;
+  --color-text-muted: #7a6f66;
+  --color-accent-green: #e4f2e6;
+  --color-accent-green-fg: #4f8a5a;
+  --color-accent-purple: #efe6f7;
+  --color-accent-purple-fg: #8a5cc7;
+  --color-accent-peach: #fbe6db;
+  --color-accent-peach-fg: #c0714a;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --shadow-card: 0 6px 20px rgba(80, 50, 20, 0.06);
 }
 
 * {
@@ -10,6 +27,7 @@
 
 body {
   margin: 0;
+  background: #ffffff;
 }
 
 h1,
