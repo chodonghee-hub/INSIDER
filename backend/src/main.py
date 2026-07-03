@@ -6,6 +6,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from google.genai.errors import APIError
 from pydantic import BaseModel
 
 from src.report_generator import build_report
@@ -49,3 +50,7 @@ def create_report(request: ReportRequest):
         raise HTTPException(status_code=502, detail=str(exc)) from exc
     except RuntimeError as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
+    except APIError as exc:
+        raise HTTPException(
+            status_code=502, detail=f"LLM 호출 중 오류가 발생했습니다: {exc.message}"
+        ) from exc
