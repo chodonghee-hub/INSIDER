@@ -1,4 +1,7 @@
 # (주)인사이터 사전과제
+
+🌐 배포 주소 : https://insiderfrontend-production.up.railway.app/
+
 ### 기간 : 26.07.01 ~ 26.07.03
 
 # AI 기반 K-CBCL 보호자 맞춤형 사전 안내 리포트 (PoC)
