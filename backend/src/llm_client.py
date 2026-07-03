@@ -7,7 +7,7 @@ import os
 
 from google import genai
 
-_DEFAULT_MODEL = "gemma-3-27b-it"
+_DEFAULT_MODEL = "gemma-4-31b-it"
 
 
 def _get_client() -> genai.Client:
@@ -19,7 +19,7 @@ def _get_client() -> genai.Client:
     return genai.Client(api_key=api_key)
 
 
-def generate_text(prompt: str, temperature: float = 0.3, max_output_tokens: int = 2000) -> str:
+def generate_text(prompt: str, temperature: float = 0.3, max_output_tokens: int = 8000) -> str:
     """LLM에 프롬프트를 전달하고 생성된 텍스트를 반환한다."""
     client = _get_client()
     model = os.environ.get("GEMINI_MODEL", _DEFAULT_MODEL)
