@@ -6,8 +6,9 @@
 import os
 
 from google import genai
+from google.genai import types
 
-_DEFAULT_MODEL = "gemma-4-31b-it"
+_DEFAULT_MODEL = "gemini-2.5-flash"
 
 
 def _get_client() -> genai.Client:
@@ -24,12 +25,12 @@ def generate_text(prompt: str, temperature: float = 0.3, max_output_tokens: int 
     client = _get_client()
     model = os.environ.get("GEMINI_MODEL", _DEFAULT_MODEL)
 
-    response = client.models.generate_content(
-        model=model,
-        contents=prompt,
-        config={
-            "temperature": temperature,
-            "max_output_tokens": max_output_tokens,
-        },
-    )
+    config = {"temperature": temperature, "max_output_tokens": max_output_tokens}
+    if model.startswith("gemini"):
+        # gemini 계열은 기본적으로 내부 thinking 토큰을 소모해 응답이 느려지므로,
+        # 판정(정상/준임상/임상)은 이미 classifier.py가 끝낸 상태라 별도 추론이 필요 없어 비활성화한다.
+        # (gemma 계열은 thinking_config 자체를 지원하지 않아 400 오류가 나므로 gemini에만 적용)
+        config["thinking_config"] = types.ThinkingConfig(thinking_budget=0)
+
+    response = client.models.generate_content(model=model, contents=prompt, config=config)
     return response.text
