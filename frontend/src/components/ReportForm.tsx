@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { fetchSampleCases } from "../api/reportApi";
 import type { ChildInfo, SampleCase } from "../lib/types";
+import { ScreenFooter } from "./layout/ScreenFooter";
+import { CaseSelect } from "./CaseSelect";
 
 interface ReportFormProps {
   onSubmit: (child: ChildInfo, scores: Record<string, number>) => void;
@@ -37,20 +39,21 @@ export function ReportForm({ onSubmit, loading }: ReportFormProps) {
   return (
     <form className="report-form" onSubmit={handleSubmit}>
       <label htmlFor="case-select">더미 데이터로 리포트 생성하기</label>
-      <select
+      <CaseSelect
         id="case-select"
+        cases={cases}
         value={selectedCaseId}
-        onChange={(e) => setSelectedCaseId(e.target.value)}
-      >
-        {cases.map((c) => (
-          <option key={c.case_id} value={c.case_id}>
-            {c.label}
-          </option>
-        ))}
-      </select>
-      <button type="submit" disabled={loading || !selectedCaseId}>
-        {loading ? "리포트 생성 중..." : "리포트 생성"}
-      </button>
+        onChange={setSelectedCaseId}
+      />
+      <ScreenFooter>
+        <button
+          type="submit"
+          className="cta-button"
+          disabled={loading || !selectedCaseId}
+        >
+          {loading ? "리포트 생성 중..." : "리포트 생성"}
+        </button>
+      </ScreenFooter>
     </form>
   );
 }

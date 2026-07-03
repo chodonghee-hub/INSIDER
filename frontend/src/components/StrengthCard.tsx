@@ -5,19 +5,28 @@ interface StrengthCardProps {
 }
 
 export function StrengthCard({ strengths }: StrengthCardProps) {
+  if (strengths.length === 0) {
+    return (
+      <div className="strength-block">
+        <p>아직 뚜렷하게 드러난 강점 영역이 없어요.</p>
+      </div>
+    );
+  }
+
   return (
-    <section className="card strength-card">
-      <h2>아이의 숨겨진 강점과 기질</h2>
-      {strengths.length === 0 && <p>아직 뚜렷하게 드러난 강점 영역이 없어요.</p>}
-      <ul>
-        {strengths.map((s) => (
-          <li key={s.scale}>
-            <h3>{s.trait_theme}</h3>
-            <p>{s.description}</p>
-            <p className="tip">함께 해보면 좋은 활동: {s.activity_suggestion}</p>
-          </li>
-        ))}
-      </ul>
-    </section>
+    <div className="strength-block">
+      <div className="illustration-placeholder">
+        <span className="illustration-circle">🐻</span>
+      </div>
+
+      {strengths.map((s) => (
+        <div key={s.scale} className="strength-item">
+          <span className="badge badge--accent">{s.trait_theme}</span>
+          <p className="screen-desc">{s.description}</p>
+          <p className="activity-label">아이의 강점을 키워줄 놀이</p>
+          <span className="chip">{s.activity_suggestion}</span>
+        </div>
+      ))}
+    </div>
   );
 }
