@@ -1,6 +1,7 @@
 """FastAPI 앱 — POST /report 단일 엔드포인트 (PRD 7.1절)."""
 
 import json
+import os
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -15,9 +16,16 @@ load_dotenv()
 
 app = FastAPI(title="K-CBCL 사전 안내 리포트 API")
 
+_default_origins = ["http://localhost:5173"]
+_extra_origins = [
+    origin.strip()
+    for origin in os.getenv("ALLOWED_ORIGINS", "").split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=_default_origins + _extra_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
